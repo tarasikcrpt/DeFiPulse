@@ -1,0 +1,42 @@
+# scripts/yield_farming.py
+
+import requests
+import pandas as pd
+
+def fetch_yield_farming(api_url, farm_id):
+    """
+    Fetch yield farming data from an API.
+    
+    :param api_url: Base URL of the DeFi API
+    :param farm_id: ID of the yield farming opportunity to fetch data for
+    :return: DataFrame with yield farming data
+    """
+    response = requests.get(f'{api_url}/yield_farming/{farm_id}')
+    response.raise_for_status()
+    data = response.json()
+    df = pd.DataFrame([data])
+    return df
+
+def analyze_yield_farming(df):
+    """
+    Analyze yield farming data.
+    
+    :param df: DataFrame with yield farming data
+    :return: Analysis results as DataFrame
+    """
+    analysis = {
+        'farm_id': df['id'].iloc[0],
+        'annual_yield': df['annual_yield'].iloc[0],
+        'total_rewards': df['total_rewards'].iloc[0],
+        'reward_token': df['reward_token'].iloc[0]
+    }
+    analysis_df = pd.DataFrame([analysis])
+    return analysis_df
+
+# Example usage:
+# api_url = 'https://api.defi.example.com'
+# farm_id = 'farm_123'
+# yield_farming_df = fetch_yield_farming(api_url, farm_id)
+# print(yield_farming_df)
+# yield_farming_analysis_df = analyze_yield_farming(yield_farming_df)
+# print(yield_farming_analysis_df)
